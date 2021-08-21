@@ -334,7 +334,7 @@
 	        */
 	        $this->style_css = "
 			.btn-detail {
-				// display: none;
+				display: none;
 			}
 			.btn-edit {
 				display: none;

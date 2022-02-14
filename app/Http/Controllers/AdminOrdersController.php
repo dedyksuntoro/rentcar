@@ -62,7 +62,11 @@
 				$this->form[] = ['label'=>'Car','name'=>'id_car','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbl_cars,id'];
 				$this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Rental Type','name'=>'rent_type','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Start Days','name'=>'datemin','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'End Days','name'=>'datemax','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total Days','name'=>'total_days','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Start Hour','name'=>'hourmin','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'End Hour','name'=>'hourmax','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total Hour','name'=>'total_hour','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Discount','name'=>'discount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total','name'=>'total','type'=>'money','validation'=>'required|min:0','width'=>'col-sm-10'];
@@ -96,7 +100,8 @@
 	        |
 	        */
 	        $this->sub_module = array();
-            $this->sub_module[] = ['label'=>'Payment','path'=>'order_payments','parent_columns'=>'order_number,price,total_days,total_hour,discount,additional_cost,total,pay_status','foreign_key'=>'id_order','button_color'=>'success','button_icon'=>'fa fa-money'];
+            $this->sub_module[] = ['label'=>'Payment','path'=>'order_payments','parent_columns'=>'order_number,price,datemin,datemax,total_days,hourmin,hourmax,total_hour,discount,additional_cost,total,pay_status',
+                'parent_columns_alias'=>'Order Number,Price,Start Date,End Date,Total Day,Start Hour,End Hour,Total Hour,Discount,Additional Cost,Total Price,Pay Status','foreign_key'=>'id_order','button_color'=>'success','button_icon'=>'fa fa-money'];
 
 	        /*
 	        | ----------------------------------------------------------------------
@@ -199,6 +204,10 @@
 							$("#price").val("");
 							$("#discount").val("");
 							$("#total").val("");
+                            $("#booking_date").val("");
+							$("#pickup_time").val("");
+							$("#return_date").val("");
+							$("#back_hour").val("");
 						}else if(type == "Hourly"){
 							$(".total_days").hide();
 							$(".total_hour").show();
@@ -210,8 +219,13 @@
 							$("#price").val("");
 							$("#discount").val("");
 							$("#total").val("");
+							$("#booking_date").val("");
+							$("#pickup_time").val("");
+                            $("#return_date").val("");
+							$("#back_hour").val("");
 						}
 					});
+
                     $("#id_cars").change(function(){
 						var type = $("option:selected", "#rent_type").text();
 						if(type == "Daily"){
@@ -234,24 +248,47 @@
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
 						}
                     });
+
                     $("#total_days").keyup(function(){
+                        var startDateTime = $("#booking_date").val() + " " + $("#pickup_time").val();
+                        var newDateTime = moment(startDateTime, "YYYY-MM-DD hh:mm")
+                                            .add($(this).val(), "days")
+                                            .format("YYYY-MM-DD HH:mm");
+                        var newDateTime_split = newDateTime.split(" ");
+                        $("#return_date").val(newDateTime_split[0]);
+                        $("#back_hour").val(newDateTime_split[1]);
                         if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
-                            $("#total").val($("#price").val() * $(this).val());
+                            $("#total").val($("#price").val() * $("#total_days").val());
                         }else{
-                            $("#total").val(($("#price").val() * $(this).val() / 100) * $("#discount").val());
-                            $("#total").val($("#price").val() * $(this).val() - ($("#price").val() * $(this).val() * $("#discount").val() / 100));
+                            $("#total").val(($("#price").val() * $("#total_days").val() / 100) * $("#discount").val());
+                            $("#total").val($("#price").val() * $("#total_days").val() - ($("#price").val() * $("#total_days").val() * $("#discount").val() / 100));
                         }
                         $(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
                     });
+
 					$("#total_hour").keyup(function(){
+                        var startDateTime = $("#booking_date").val() + " " + $("#pickup_time").val();
+                        var newDateTime = moment(startDateTime, "YYYY-MM-DD hh:mm")
+                                            .add($(this).val(), "hours")
+                                            .format("YYYY-MM-DD HH:mm");
+                        var newDateTime_split = newDateTime.split(" ");
+                        $("#return_date").val(newDateTime_split[0]);
+                        $("#back_hour").val(newDateTime_split[1]);
                         if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
-                            $("#total").val($("#price").val() * $(this).val());
+                            $("#total").val($("#price").val() * $("#total_hour").val());
                         }else{
-                            $("#total").val(($("#price").val() * $(this).val() / 100) * $("#discount").val());
-                            $("#total").val($("#price").val() * $(this).val() - ($("#price").val() * $(this).val() * $("#discount").val() / 100));
+                            $("#total").val(($("#price").val() * $("#total_hour").val() / 100) * $("#discount").val());
+                            $("#total").val($("#price").val() * $("#total_hour").val() - ($("#price").val() * $("#total_hour") * $("#discount").val() / 100));
                         }
                         $(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
                     });
+
+                    $("#booking_date, #pickup_time").change(function(){
+                        $("#total_hour").val("");
+                        $("#return_date").val("");
+                        $("#back_hour").val("");
+                    });
+
                     $("#discount").keyup(function(){
 						var type = $("option:selected", "#rent_type").text();
 						if(type == "Daily"){
@@ -270,6 +307,7 @@
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
 						}
                     });
+
 					// var arr_total = [];
 					// arr_total.push($("#total").val().replace(/[^0-9]/gi, ""));
 					// $("#additional_cost").keyup(function(){
@@ -385,20 +423,20 @@
 				$data['get_branch'] = DB::table('tbm_branch')->where('id', CRUDBooster::me()->id_branch)->get();
                 $data['get_customer'] = DB::table('tbl_customers')->where('id_branch', CRUDBooster::me()->id_branch)->where('status', 1)->get();
                 $data['get_car'] = DB::table('tbl_cars')
-                    ->select('tbl_cars.id AS idcar', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
+                    ->select('tbl_cars.id AS idcar', 'tbl_cars.on_duty AS onduty', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
                     ->join('tbm_car_brand', 'tbm_car_brand.id', 'tbl_cars.id_brand')
                     ->join('tbm_car_manufacturer', 'tbm_car_manufacturer.id', 'tbm_car_brand.id_manufacturer')
                     ->where('id_branch', CRUDBooster::me()->id_branch)
-                    ->where('tbl_cars.on_duty', null)
+                    // ->where('tbl_cars.on_duty', null)
                     ->get();
 			}else{
 				$data['get_branch'] = DB::table('tbm_branch')->get();
                 $data['get_customer'] = DB::table('tbl_customers')->where('status', 1)->get();
                 $data['get_car'] = DB::table('tbl_cars')
-                    ->select('tbl_cars.id AS idcar', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
+                    ->select('tbl_cars.id AS idcar', 'tbl_cars.on_duty AS onduty', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
                     ->join('tbm_car_brand', 'tbm_car_brand.id', 'tbl_cars.id_brand')
                     ->join('tbm_car_manufacturer', 'tbm_car_manufacturer.id', 'tbm_car_brand.id_manufacturer')
-                    ->where('tbl_cars.on_duty', null)
+                    // ->where('tbl_cars.on_duty', null)
                     ->get();
 			}
 
@@ -501,7 +539,7 @@
 	    |
 	    */
 	    public function hook_after_edit($id) {
-	        
+
 	    }
 
 	    /*

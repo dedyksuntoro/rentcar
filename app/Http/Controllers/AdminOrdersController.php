@@ -62,11 +62,11 @@
 				$this->form[] = ['label'=>'Car','name'=>'id_car','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbl_cars,id'];
 				$this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Rental Type','name'=>'rent_type','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-				$this->form[] = ['label'=>'Start Days','name'=>'datemin','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
-				$this->form[] = ['label'=>'End Days','name'=>'datemax','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Booking Date','name'=>'booking_date','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Pickup Time','name'=>'pickup_time','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total Days','name'=>'total_days','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-				$this->form[] = ['label'=>'Start Hour','name'=>'hourmin','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
-				$this->form[] = ['label'=>'End Hour','name'=>'hourmax','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Return Date','name'=>'return_date','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Back Hour','name'=>'back_hour','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total Hour','name'=>'total_hour','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Discount','name'=>'discount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total','name'=>'total','type'=>'money','validation'=>'required|min:0','width'=>'col-sm-10'];
@@ -500,6 +500,9 @@
 			DB::table('tbl_cars')
             ->where('id', $postdata['id_car'])
             ->update(['on_duty' => 1]);
+
+            // cek booking crash
+            // $cek_booking = DB::table()
 	    }
 
 	    /*

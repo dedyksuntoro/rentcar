@@ -4,6 +4,9 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
+    use DatePeriod;
+    use DateTime;
+    use DateInterval;
 
 	class AdminOrdersController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -489,6 +492,25 @@
 	    |
 	    */
 	    public function hook_before_add(&$postdata) {
+            $period = new DatePeriod(
+                new DateTime($postdata['booking_date']),
+                new DateInterval('P1D'),
+                new DateTime($postdata['return_date'])
+            );
+
+            foreach ($period as $key => $value) {
+                // $value->format('Y-m-d');
+                $cek_crash = DB::table($this->table)
+                    ->whereRaw('DATEDIFF("'.$value->format('Y-m-d').'", booking_date) >= 0')
+                    ->whereRaw('DATEDIFF("'.$value->format('Y-m-d').'", return_date) <= 0')
+                    ->where('id_car', $postdata['id_car'])
+                    ->count('id');
+
+                if ($cek_crash > 0) {
+                    CRUDBooster::redirect(CRUDBooster::adminPath(), 'Terdapat benturan jadwal pada tanggal '.$postdata['booking_date'].' sampai dengan tanggal '.$postdata['return_date']);
+                }
+            }
+
             if($postdata['discount']=='0'){
                 $postdata['discount'] = null;
             }
@@ -497,7 +519,7 @@
             $postdata['pay_status'] = 'Ordered';
 			//Order on duty if finish on duty null
 			//If cancel order? delete by owner or administrator
-			DB::table('tbl_cars')
+			DB::table('tbl_cars') 
             ->where('id', $postdata['id_car'])
             ->update(['on_duty' => 1]);
 

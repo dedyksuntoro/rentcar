@@ -40,19 +40,59 @@
                 <select class="form-control" name="id_car" id="id_cars" required>
                     <option value="" selected disabled>-- Select Car --</option>
                     @foreach ($get_car as $row)
-                        <option value="{{$row->idcar}}">{{$row->brand}} - {{$row->manufacturer}} | Daily Rp. {{number_format($row->priceperday, 0, ',' ,'.')}} | Hourly Rp. {{number_format($row->priceperhour, 0, ',' ,'.')}}</option>
+                        <option value="{{$row->idcar}}">{{$row->brand}} - {{$row->manufacturer}} | Daily Rp. {{number_format($row->priceperday, 0, ',' ,'.')}} | Hourly Rp. {{number_format($row->priceperhour, 0, ',' ,'.')}} {{($row->onduty == 1 ? '(On Duty)' : '')}}</option>
                     @endforeach
                     <input type='hidden' name='price' id="price"class='form-control' required value="" readonly/>
                 </select>
             </div>
+
+            <div class='form-group booking_date'>
+                <label>Booking Date</label>
+                <input type='date' name='booking_date' id="booking_date" class='form-control' required value=""/>
+            </div>
+
+            <div class='form-group pickup_time'>
+                <label>Pickup Time</label>
+                <input type='time' name='pickup_time' id="pickup_time" class='form-control' required value=""/>
+            </div>
+
+            {{-- Daily --}}
+            {{-- <div class='form-group start_days' style="display: none;">
+                <label>Start Date</label>
+                <input type='date' name='datemin' id="datemin"class='form-control' required value="" disabled/>
+            </div>
+            <div class='form-group end_days' style="display: none;">
+                <label>End Date</label>
+                <input type='date' name='datemax' id="datemax"class='form-control' required value="" disabled/>
+            </div> --}}
             <div class='form-group total_days' style="display: none;">
                 <label>Total Days</label>
-                <input type='number' name='total_days' id="total_days"class='form-control' required value="" disabled/>
+                <input type='number' name='total_days' id="total_days" class='form-control' required value=""/>
             </div>
+
+            {{-- Hourly --}}
+            {{-- <div class='form-group start_hour' style="display: none;">
+                <label>Start Hour</label>
+                <input type='time' name='hourmin' id="hourmin"class='form-control' required value="" disabled/>
+            </div>
+            <div class='form-group end_hour' style="display: none;">
+                <label>End Hour</label>
+                <input type='time' name='hourmax' id="hourmax"class='form-control' required value="" disabled/>
+            </div> --}}
             <div class='form-group total_hour' style="display: none;">
                 <label>Total Hour</label>
-                <input type='number' name='total_hour' id="total_hour"class='form-control' required value="" disabled/>
+                <input type='number' name='total_hour' id="total_hour"class='form-control' required value=""/>
             </div>
+
+            <div class='form-group return_date'>
+                <label>Return Date</label>
+                <input type='date' name='return_date' id="return_date"class='form-control' required value="" readonly/>
+            </div>
+            <div class='form-group back_hour'>
+                <label>Back Hour</label>
+                <input type='time' name='back_hour' id="back_hour"class='form-control' required value="" readonly/>
+            </div>
+
             <div class='form-group'>
                 <label>Discount</label>
                 <input type='number' name='discount' id="discount"class='form-control inputMoney' value=""/>

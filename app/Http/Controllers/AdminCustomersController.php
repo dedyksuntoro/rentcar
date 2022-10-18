@@ -45,7 +45,10 @@
 			$this->form[] = ['label'=>'Gender','name'=>'gender','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataenum'=>'1|Laki-laki;2|Perempuan'];
 			$this->form[] = ['label'=>'Phone','name'=>'phone','type'=>'number','validation'=>'required|numeric','width'=>'col-sm-10','placeholder'=>'You can only enter the number only'];
 			$this->form[] = ['label'=>'Address','name'=>'address','type'=>'textarea','validation'=>'required|string|min:1|max:5000','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Identity','name'=>'identity','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Identity Image 1','name'=>'identity_1_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Ex. KTP Image. Size file image under 1MB'];
+            $this->form[] = ['label'=>'Identity Number 1','name'=>'identity_1_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','help'=>'Ex. KTP Number'];
+			$this->form[] = ['label'=>'Identity Image 2','name'=>'identity_2_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Ex. SIM Image. Size file image under 1MB'];
+            $this->form[] = ['label'=>'Identity Number 1','name'=>'identity_1_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','help'=>'Ex. SIM Number'];
 			$this->form[] = ['label'=>'Status','name'=>'status','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataenum'=>'1|Active;2|Banned'];
             if(CRUDBooster::me()->id_branch==0):
 			    $this->form[] = ['label'=>'Branch','name'=>'id_branch','type'=>'select','validation'=>'required','width'=>'col-sm-10','datatable'=>'tbm_branch,branch_name','datatable_format'=>'branch_name, \' - \', city'];

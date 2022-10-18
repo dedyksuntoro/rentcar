@@ -33,6 +33,8 @@
 			$this->col[] = ["label"=>"Name","name"=>"customer_name"];
 			$this->col[] = ["label"=>"Gender","name"=>"gender"];
 			$this->col[] = ["label"=>"Phone","name"=>"phone"];
+			$this->col[] = ["label"=>"Identity Number 1","name"=>"identity_1_number"];
+			$this->col[] = ["label"=>"Identity Number 2","name"=>"identity_2_number"];
             $this->col[] = ["label"=>"Branch","name"=>"id_branch","join"=>"tbm_branch,branch_name"];
 			$this->col[] = ["label"=>"Status","name"=>"status"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
@@ -48,7 +50,7 @@
 			$this->form[] = ['label'=>'Identity Image 1','name'=>'identity_1_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Ex. KTP Image. Size file image under 1MB'];
             $this->form[] = ['label'=>'Identity Number 1','name'=>'identity_1_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','help'=>'Ex. KTP Number'];
 			$this->form[] = ['label'=>'Identity Image 2','name'=>'identity_2_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Ex. SIM Image. Size file image under 1MB'];
-            $this->form[] = ['label'=>'Identity Number 1','name'=>'identity_1_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','help'=>'Ex. SIM Number'];
+            $this->form[] = ['label'=>'Identity Number 2','name'=>'identity_2_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','help'=>'Ex. SIM Number'];
 			$this->form[] = ['label'=>'Status','name'=>'status','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataenum'=>'1|Active;2|Banned'];
             if(CRUDBooster::me()->id_branch==0):
 			    $this->form[] = ['label'=>'Branch','name'=>'id_branch','type'=>'select','validation'=>'required','width'=>'col-sm-10','datatable'=>'tbm_branch,branch_name','datatable_format'=>'branch_name, \' - \', city'];

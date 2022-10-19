@@ -23,7 +23,7 @@
                 <select class="form-control" name="id_customer" required>
                     <option value="" selected disabled>-- Select Customer --</option>
                     @foreach ($get_customer as $row)
-                        <option value="{{$row->id}}">{{$row->customer_name}} - {{$row->address}}</option>
+                        <option value="{{$row->id}}">{{$row->customer_name}} - {{$row->address}} {{($row->customer_rentcar_name == null ? '' : '('.$row->customer_rentcar_name.')')}}</option>
                     @endforeach
                 </select>
             </div>

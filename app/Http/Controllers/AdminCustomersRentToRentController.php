@@ -5,7 +5,7 @@
 	use DB;
 	use CRUDBooster;
 
-	class AdminCustomersController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminCustomersRentToRentController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
@@ -30,47 +30,29 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Name","name"=>"customer_name"];
+			$this->col[] = ["label"=>"Customer Name","name"=>"customer_name"];
+			$this->col[] = ["label"=>"Customer Rentcar Name","name"=>"customer_rentcar_name"];
+			$this->col[] = ["label"=>"Birth Date","name"=>"birth_date"];
+			$this->col[] = ["label"=>"Birth Place","name"=>"birth_place"];
 			$this->col[] = ["label"=>"Gender","name"=>"gender"];
 			$this->col[] = ["label"=>"Phone","name"=>"phone"];
-			$this->col[] = ["label"=>"KTP","name"=>"identity_1_number"];
-			$this->col[] = ["label"=>"SIM","name"=>"identity_2_number"];
-			$this->col[] = ["label"=>"Socmed","name"=>"identity_3_number"];
-			$this->col[] = ["label"=>"BPJS/NPWP/Asuransi","name"=>"identity_4_number"];
-			$this->col[] = ["label"=>"NPWP","name"=>"identity_5_number"];
-			$this->col[] = ["label"=>"KK + ID Pegawai/Kartu Pelajar/Akta Lahir","name"=>"identity_6_number"];
-            $this->col[] = ["label"=>"Branch","name"=>"id_branch","join"=>"tbm_branch,branch_name"];
+			$this->col[] = ["label"=>"Address","name"=>"address"];
 			$this->col[] = ["label"=>"Status","name"=>"status"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Customer Name','name'=>'customer_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Customer Rentcar Name','name'=>'customer_rentcar_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Date of Birth','name'=>'birth_date','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Place of Birth','name'=>'birth_place','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Gender','name'=>'gender','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataenum'=>'1|Laki-laki;2|Perempuan'];
 			$this->form[] = ['label'=>'Phone','name'=>'phone','type'=>'number','validation'=>'required|numeric','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Address','name'=>'address','type'=>'textarea','validation'=>'required|string|min:1|max:5000','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'KTP Image','name'=>'identity_1_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
-            $this->form[] = ['label'=>'KTP Number','name'=>'identity_1_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'SIM Image','name'=>'identity_2_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
-            $this->form[] = ['label'=>'SIM Number','name'=>'identity_2_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-            $this->form[] = ['label'=>'Social Media Image','name'=>'identity_3_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
-            $this->form[] = ['label'=>'Social Media ID','name'=>'identity_3_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'BPJS / NPWP / Asuransi Image','name'=>'identity_4_image','type'=>'upload','validation'=>'max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
-            $this->form[] = ['label'=>'BPJS / NPWP / Asuransi Number','name'=>'identity_4_number','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
-            // $this->form[] = ['label'=>'NPWP Image','name'=>'identity_5_image','type'=>'upload','validation'=>'max:255','width'=>'col-sm-10'];
-            // $this->form[] = ['label'=>'NPWP Number','name'=>'identity_5_number','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'KK + ID Pegawai / Kartu Pelajar / Akta Lahir Image','name'=>'identity_5_image','type'=>'upload','validation'=>'max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
-            $this->form[] = ['label'=>'KK + ID Pegawai / Kartu Pelajar / Akta Lahir Number','name'=>'identity_5_number','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
-            // $this->form[] = ['label'=>'Other Insurance Image','name'=>'identity_7_image','type'=>'upload','validation'=>'max:255','width'=>'col-sm-10'];
-            // $this->form[] = ['label'=>'Other Insurance Number','name'=>'identity_7_number','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
-            $this->form[] = ['label'=>'Credit Card Image','name'=>'identity_6_image','type'=>'upload','validation'=>'max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
-            // $this->form[] = ['label'=>'Credit Card Number','name'=>'identity_8_number','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Status','name'=>'status','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataenum'=>'1|Active;2|Banned'];
             $this->form[] = ['label'=>'Reason','name'=>'reason_banned','type'=>'textarea','validation'=>'string|max:5000','width'=>'col-sm-10'];
             $this->form[] = ['label'=>'Reason Image','name'=>'reason_banned_image','type'=>'upload','validation'=>'max:255','width'=>'col-sm-10'];
-            if(CRUDBooster::me()->id_branch==0):
+			if(CRUDBooster::me()->id_branch==0):
 			    $this->form[] = ['label'=>'Branch','name'=>'id_branch','type'=>'select','validation'=>'required','width'=>'col-sm-10','datatable'=>'tbm_branch,branch_name','datatable_format'=>'branch_name, \' - \', city'];
             else:
 			    $this->form[] = ['label'=>'Branch','name'=>'id_branch','type'=>'hidden','validation'=>'required','width'=>'col-sm-10','value'=>CRUDBooster::me()->id_branch];
@@ -79,14 +61,33 @@
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Customer Name','name'=>'customer_name','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Date of Birth','name'=>'birth_date','type'=>'date','validation'=>'required|date','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Place of Birth','name'=>'birth_place','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-10','dataenum'=>'1|Laki-laki;2|Perempuan'];
-			//$this->form[] = ['label'=>'Gender','name'=>'gender','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Phone','name'=>'phone','type'=>'number','validation'=>'required|numeric','width'=>'col-sm-10','placeholder'=>'You can only enter the number only'];
-			//$this->form[] = ['label'=>'Address','name'=>'address','type'=>'textarea','validation'=>'required|string|min:1|max:5000','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Identity','name'=>'identity','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Status','name'=>'status','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-10','dataenum'=>'1|On;2|Off;3|Banned'];
+			//$this->form[] = ["label"=>"Customer Name","name"=>"customer_name","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Customer Rentcar Name","name"=>"customer_rentcar_name","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Birth Date","name"=>"birth_date","type"=>"date","required"=>TRUE,"validation"=>"required|date"];
+			//$this->form[] = ["label"=>"Birth Place","name"=>"birth_place","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Gender","name"=>"gender","type"=>"number","required"=>TRUE,"validation"=>"required|integer|min:0"];
+			//$this->form[] = ["label"=>"Phone","name"=>"phone","type"=>"number","required"=>TRUE,"validation"=>"required|numeric","placeholder"=>"You can only enter the number only"];
+			//$this->form[] = ["label"=>"Address","name"=>"address","type"=>"textarea","required"=>TRUE,"validation"=>"required|string|min:5|max:5000"];
+			//$this->form[] = ["label"=>"Identity 1 Image","name"=>"identity_1_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 1 Number","name"=>"identity_1_number","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 2 Image","name"=>"identity_2_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 2 Number","name"=>"identity_2_number","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 3 Image","name"=>"identity_3_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 3 Number","name"=>"identity_3_number","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 4 Image","name"=>"identity_4_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 4 Number","name"=>"identity_4_number","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 5 Image","name"=>"identity_5_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 5 Number","name"=>"identity_5_number","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 6 Image","name"=>"identity_6_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 6 Number","name"=>"identity_6_number","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 7 Image","name"=>"identity_7_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 7 Number","name"=>"identity_7_number","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 8 Image","name"=>"identity_8_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Identity 8 Number","name"=>"identity_8_number","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Status","name"=>"status","type"=>"number","required"=>TRUE,"validation"=>"required|integer|min:0"];
+			//$this->form[] = ["label"=>"Reason Banned","name"=>"reason_banned","type"=>"textarea","required"=>TRUE,"validation"=>"required|string|min:5|max:5000"];
+			//$this->form[] = ["label"=>"Reason Banned Image","name"=>"reason_banned_image","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Branch","name"=>"id_branch","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"branch,id"];
 			# OLD END FORM
 
 			/*
@@ -166,6 +167,7 @@
 	        */
 	        $this->table_row_color = array();
             $this->table_row_color[] = ['condition'=>"[status] == '2'","color"=>"danger"];
+
 
 	        /*
 	        | ----------------------------------------------------------------------
@@ -287,7 +289,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-            $query->whereNull('customer_rentcar_name');
+            $query->whereNotNull('customer_rentcar_name');
             if(CRUDBooster::me()->id_branch != 0){
                 $query->where('id_branch', CRUDBooster::me()->id_branch);
             }
@@ -306,9 +308,9 @@
             }elseif($column_index == 1 && $column_value == 2){
                 $column_value = 'Perempuan';
             }
-            if($column_index == 10 && $column_value == 1){
+            if($column_index == 7 && $column_value == 1){
                 $column_value = 'Active';
-            }elseif($column_index == 10 && $column_value == 2){
+            }elseif($column_index == 7 && $column_value == 2){
                 $column_value = 'Banned';
             }
 	    }

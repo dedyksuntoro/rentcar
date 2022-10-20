@@ -37,8 +37,7 @@
 			$this->col[] = ["label"=>"SIM","name"=>"identity_2_number"];
 			$this->col[] = ["label"=>"Socmed","name"=>"identity_3_number"];
 			$this->col[] = ["label"=>"BPJS/NPWP/Asuransi","name"=>"identity_4_number"];
-			$this->col[] = ["label"=>"NPWP","name"=>"identity_5_number"];
-			$this->col[] = ["label"=>"KK + ID Pegawai/Kartu Pelajar/Akta Lahir","name"=>"identity_6_number"];
+			$this->col[] = ["label"=>"KK + ID Pegawai/Kartu Pelajar/Akta Lahir","name"=>"identity_5_number"];
             $this->col[] = ["label"=>"Branch","name"=>"id_branch","join"=>"tbm_branch,branch_name"];
 			$this->col[] = ["label"=>"Status","name"=>"status"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
@@ -56,7 +55,7 @@
 			$this->form[] = ['label'=>'SIM Image','name'=>'identity_2_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
             $this->form[] = ['label'=>'SIM Number','name'=>'identity_2_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
             $this->form[] = ['label'=>'Social Media Image','name'=>'identity_3_image','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
-            $this->form[] = ['label'=>'Social Media ID','name'=>'identity_3_number','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+            $this->form[] = ['label'=>'Social Media ID','name'=>'identity_3_number','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'BPJS / NPWP / Asuransi Image','name'=>'identity_4_image','type'=>'upload','validation'=>'max:255','width'=>'col-sm-10','help'=>'Image size must be under 1MB'];
             $this->form[] = ['label'=>'BPJS / NPWP / Asuransi Number','name'=>'identity_4_number','type'=>'number','validation'=>'integer|min:0','width'=>'col-sm-10'];
             // $this->form[] = ['label'=>'NPWP Image','name'=>'identity_5_image','type'=>'upload','validation'=>'max:255','width'=>'col-sm-10'];

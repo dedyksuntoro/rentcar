@@ -196,11 +196,17 @@
                 $(function () {
 					$("#rent_type").change(function(){
 						var type = $("option:selected", this).text();
-						if(type == "Daily"){
-							$(".total_days").show();
+						if(type == "Monthly"){
+							$(".total_month").show();
+							$(".total_week").hide();
+							$(".total_days").hide();
 							$(".total_hour").hide();
-							$("#total_days").prop("disabled", false);
+                            $("#total_month").prop("disabled", false);
+							$("#total_week").prop("disabled", true);
+							$("#total_days").prop("disabled", true);
 							$("#total_hour").prop("disabled", true);
+                            $("#total_month").val("");
+							$("#total_week").val("");
 							$("#total_days").val("");
 							$("#total_hour").val("");
 							$("#id_cars").val("");
@@ -211,11 +217,17 @@
 							$("#pickup_time").val("");
 							$("#return_date").val("");
 							$("#back_hour").val("");
-						}else if(type == "Hourly"){
+						}else if(type == "Weekly"){
+                            $(".total_month").hide();
+							$(".total_week").show();
 							$(".total_days").hide();
-							$(".total_hour").show();
+							$(".total_hour").hide();
+                            $("#total_month").prop("disabled", true);
+							$("#total_week").prop("disabled", false);
 							$("#total_days").prop("disabled", true);
-							$("#total_hour").prop("disabled", false);
+							$("#total_hour").prop("disabled", true);
+                            $("#total_month").val("");
+							$("#total_week").val("");
 							$("#total_days").val("");
 							$("#total_hour").val("");
 							$("#id_cars").val("");
@@ -226,23 +238,83 @@
 							$("#pickup_time").val("");
                             $("#return_date").val("");
 							$("#back_hour").val("");
-						}
+						}else if(type == "Daily"){
+                            $(".total_month").hide();
+							$(".total_week").hide();
+							$(".total_days").show();
+							$(".total_hour").hide();
+                            $("#total_month").prop("disabled", true);
+							$("#total_week").prop("disabled", true);
+							$("#total_days").prop("disabled", false);
+							$("#total_hour").prop("disabled", true);
+                            $("#total_month").val("");
+							$("#total_week").val("");
+							$("#total_days").val("");
+							$("#total_hour").val("");
+							$("#id_cars").val("");
+							$("#price").val("");
+							$("#discount").val("");
+							$("#total").val("");
+                            $("#booking_date").val("");
+							$("#pickup_time").val("");
+							$("#return_date").val("");
+							$("#back_hour").val("");
+                        }else if(type == "Hourly"){
+                            $(".total_month").hide();
+							$(".total_week").hide();
+							$(".total_days").hide();
+							$(".total_hour").show();
+                            $("#total_month").prop("disabled", true);
+							$("#total_week").prop("disabled", true);
+							$("#total_days").prop("disabled", true);
+							$("#total_hour").prop("disabled", false);
+                            $("#total_month").val("");
+							$("#total_week").val("");
+							$("#total_days").val("");
+							$("#total_hour").val("");
+							$("#id_cars").val("");
+							$("#price").val("");
+							$("#discount").val("");
+							$("#total").val("");
+							$("#booking_date").val("");
+							$("#pickup_time").val("");
+                            $("#return_date").val("");
+							$("#back_hour").val("");
+                        }
 					});
 
                     $("#id_cars").change(function(){
 						var type = $("option:selected", "#rent_type").text();
-						if(type == "Daily"){
+						if(type == "MONTHLY"){
 							var price = $("option:selected", this).text().split("|");
 							$("#price").val(price[1].replace(/[^0-9]/gi, ""));
+							if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
+								$("#total").val($("#price").val() * $("#total_month").val());
+							}else{
+								$("#total").val($("#price").val() * $("#total_month").val() - ($("#price").val() * $("#total_month").val() * $("#discount").val() / 100));
+							}
+							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
+						}else if(type == "WEEKLY"){
+							var price = $("option:selected", this).text().split("|");
+							$("#price").val(price[2].replace(/[^0-9]/gi, ""));
+							if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
+								$("#total").val($("#price").val() * $("#total_week").val());
+							}else{
+								$("#total").val($("#price").val() * $("#total_week").val() - ($("#price").val() * $("#total_week").val() * $("#discount").val() / 100));
+							}
+							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
+						}else if(type == "DAILY"){
+							var price = $("option:selected", this).text().split("|");
+							$("#price").val(price[3].replace(/[^0-9]/gi, ""));
 							if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
 								$("#total").val($("#price").val() * $("#total_days").val());
 							}else{
 								$("#total").val($("#price").val() * $("#total_days").val() - ($("#price").val() * $("#total_days").val() * $("#discount").val() / 100));
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
-						}else if(type == "Hourly"){
+						}else if(type == "HOURLY"){
 							var price = $("option:selected", this).text().split("|");
-							$("#price").val(price[2].replace(/[^0-9]/gi, ""));
+							$("#price").val(price[4].replace(/[^0-9]/gi, ""));
 							if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
 								$("#total").val($("#price").val() * $("#total_hour").val());
 							}else{
@@ -250,6 +322,40 @@
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
 						}
+                    });
+
+                    $("#total_month").keyup(function(){
+                        var startDateTime = $("#booking_date").val() + " " + $("#pickup_time").val();
+                        var newDateTime = moment(startDateTime, "YYYY-MM-DD hh:mm")
+                                            .add($(this).val(), "months")
+                                            .format("YYYY-MM-DD HH:mm");
+                        var newDateTime_split = newDateTime.split(" ");
+                        $("#return_date").val(newDateTime_split[0]);
+                        $("#back_hour").val(newDateTime_split[1]);
+                        if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
+                            $("#total").val($("#price").val() * $("#total_month").val());
+                        }else{
+                            $("#total").val(($("#price").val() * $("#total_month").val() / 100) * $("#discount").val());
+                            $("#total").val($("#price").val() * $("#total_month").val() - ($("#price").val() * $("#total_month").val() * $("#discount").val() / 100));
+                        }
+                        $(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
+                    });
+
+					$("#total_week").keyup(function(){
+                        var startDateTime = $("#booking_date").val() + " " + $("#pickup_time").val();
+                        var newDateTime = moment(startDateTime, "YYYY-MM-DD hh:mm")
+                                            .add($(this).val(), "weeks")
+                                            .format("YYYY-MM-DD HH:mm");
+                        var newDateTime_split = newDateTime.split(" ");
+                        $("#return_date").val(newDateTime_split[0]);
+                        $("#back_hour").val(newDateTime_split[1]);
+                        if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
+                            $("#total").val($("#price").val() * $("#total_week").val());
+                        }else{
+                            $("#total").val(($("#price").val() * $("#total_week").val() / 100) * $("#discount").val());
+                            $("#total").val($("#price").val() * $("#total_week").val() - ($("#price").val() * $("#total_week") * $("#discount").val() / 100));
+                        }
+                        $(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
                     });
 
                     $("#total_days").keyup(function(){
@@ -287,6 +393,9 @@
                     });
 
                     $("#booking_date, #pickup_time").change(function(){
+                        $("#total_month").val("");
+                        $("#total_week").val("");
+                        $("#total_days").val("");
                         $("#total_hour").val("");
                         $("#return_date").val("");
                         $("#back_hour").val("");
@@ -294,14 +403,28 @@
 
                     $("#discount").keyup(function(){
 						var type = $("option:selected", "#rent_type").text();
-						if(type == "Daily"){
+						if(type == "MONTHLY"){
+							if($(this).val() == null || $(this).val() == 0 || $(this).val() == ""){
+								$("#total").val($("#price").val() * $("#total_month").val());
+							}else{
+								$("#total").val($("#price").val() * $("#total_month").val() - ($("#price").val() * $("#total_month").val() * $(this).val() / 100));
+							}
+							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
+						}else if(type == "WEEKLY"){
+							if($(this).val() == null || $(this).val() == 0 || $(this).val() == ""){
+								$("#total").val($("#price").val() * $("#total_week").val());
+							}else{
+								$("#total").val($("#price").val() * $("#total_week").val() - ($("#price").val() * $("#total_week").val() * $(this).val() / 100));
+							}
+							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
+						}else if(type == "DAILY"){
 							if($(this).val() == null || $(this).val() == 0 || $(this).val() == ""){
 								$("#total").val($("#price").val() * $("#total_days").val());
 							}else{
 								$("#total").val($("#price").val() * $("#total_days").val() - ($("#price").val() * $("#total_days").val() * $(this).val() / 100));
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
-						}else if(type == "Hourly"){
+						}else if(type == "HOURLY"){
 							if($(this).val() == null || $(this).val() == 0 || $(this).val() == ""){
 								$("#total").val($("#price").val() * $("#total_hour").val());
 							}else{
@@ -426,7 +549,7 @@
 				$data['get_branch'] = DB::table('tbm_branch')->where('id', CRUDBooster::me()->id_branch)->get();
                 $data['get_customer'] = DB::table('tbl_customers')->where('id_branch', CRUDBooster::me()->id_branch)->where('status', 1)->get();
                 $data['get_car'] = DB::table('tbl_cars')
-                    ->select('tbl_cars.id AS idcar', 'tbl_cars.on_duty AS onduty', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
+                    ->select('tbl_cars.id AS idcar', 'tbl_cars.on_duty AS onduty', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_permonth AS pricepermonth', 'tbl_cars.price_perweek AS priceperweek', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
                     ->join('tbm_car_brand', 'tbm_car_brand.id', 'tbl_cars.id_brand')
                     ->join('tbm_car_manufacturer', 'tbm_car_manufacturer.id', 'tbm_car_brand.id_manufacturer')
                     ->where('id_branch', CRUDBooster::me()->id_branch)
@@ -436,7 +559,7 @@
 				$data['get_branch'] = DB::table('tbm_branch')->get();
                 $data['get_customer'] = DB::table('tbl_customers')->where('status', 1)->get();
                 $data['get_car'] = DB::table('tbl_cars')
-                    ->select('tbl_cars.id AS idcar', 'tbl_cars.on_duty AS onduty', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
+                ->select('tbl_cars.id AS idcar', 'tbl_cars.on_duty AS onduty', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_permonth AS pricepermonth', 'tbl_cars.price_perweek AS priceperweek', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
                     ->join('tbm_car_brand', 'tbm_car_brand.id', 'tbl_cars.id_brand')
                     ->join('tbm_car_manufacturer', 'tbm_car_manufacturer.id', 'tbm_car_brand.id_manufacturer')
                     // ->where('tbl_cars.on_duty', null)
@@ -519,7 +642,7 @@
             $postdata['pay_status'] = 'Ordered';
 			//Order on duty if finish on duty null
 			//If cancel order? delete by owner or administrator
-			DB::table('tbl_cars') 
+			DB::table('tbl_cars')
             ->where('id', $postdata['id_car'])
             ->update(['on_duty' => 1]);
 

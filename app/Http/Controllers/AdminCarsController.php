@@ -55,8 +55,10 @@ use Session;
             else:
 			    $this->form[] = ['label'=>'Branch','name'=>'id_branch','type'=>'hidden','validation'=>'required','width'=>'col-sm-10','value'=>CRUDBooster::me()->id_branch];
             endif;
-			$this->form[] = ['label'=>'Price Day','name'=>'price_perday','type'=>'money','validation'=>'required|integer','width'=>'col-sm-10','help'=>'Price per day'];
-			$this->form[] = ['label'=>'Price Hour','name'=>'price_perhour','type'=>'money','validation'=>'required|integer','width'=>'col-sm-10','help'=>'Price per hour'];
+			$this->form[] = ['label'=>'Price Monthly','name'=>'price_permonth','type'=>'money','validation'=>'required|integer','width'=>'col-sm-10','help'=>'Price per month'];
+			$this->form[] = ['label'=>'Price Weekly','name'=>'price_perweek','type'=>'money','validation'=>'required|integer','width'=>'col-sm-10','help'=>'Price per week'];
+            $this->form[] = ['label'=>'Price Daily','name'=>'price_perday','type'=>'money','validation'=>'required|integer','width'=>'col-sm-10','help'=>'Price per day'];
+			$this->form[] = ['label'=>'Price Hourly','name'=>'price_perhour','type'=>'money','validation'=>'required|integer','width'=>'col-sm-10','help'=>'Price per hour'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM

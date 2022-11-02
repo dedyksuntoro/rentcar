@@ -31,6 +31,8 @@
                 <label for="rent_type">Rental Type</label>
                 <select class="form-control" name="rent_type" id="rent_type" required>
                     <option value="" selected disabled>-- Select Rental Type --</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Weekly">Weekly</option>
                     <option value="Daily">Daily</option>
                     <option value="Hourly">Hourly</option>
                 </select>
@@ -40,7 +42,7 @@
                 <select class="form-control" name="id_car" id="id_cars" required>
                     <option value="" selected disabled>-- Select Car --</option>
                     @foreach ($get_car as $row)
-                        <option value="{{$row->idcar}}">{{$row->brand}} - {{$row->manufacturer}} | Daily Rp. {{number_format($row->priceperday, 0, ',' ,'.')}} | Hourly Rp. {{number_format($row->priceperhour, 0, ',' ,'.')}} {{($row->onduty == 1 ? '(On Duty)' : '')}}</option>
+                        <option value="{{$row->idcar}}">{{$row->brand}} - {{$row->manufacturer}} | MONTHLY Rp. {{number_format($row->pricepermonth, 0, ',' ,'.')}} | WEEKLY Rp. {{number_format($row->priceperweek, 0, ',' ,'.')}} | DAILY Rp. {{number_format($row->priceperday, 0, ',' ,'.')}} | HOURLY Rp. {{number_format($row->priceperhour, 0, ',' ,'.')}} {{($row->onduty == 1 ? '(ON DUTY)' : '')}}</option>
                     @endforeach
                     <input type='hidden' name='price' id="price"class='form-control' required value="" readonly/>
                 </select>
@@ -65,10 +67,6 @@
                 <label>End Date</label>
                 <input type='date' name='datemax' id="datemax"class='form-control' required value="" disabled/>
             </div> --}}
-            <div class='form-group total_days' style="display: none;">
-                <label>Total Days</label>
-                <input type='number' name='total_days' id="total_days" class='form-control' required value=""/>
-            </div>
 
             {{-- Hourly --}}
             {{-- <div class='form-group start_hour' style="display: none;">
@@ -79,6 +77,22 @@
                 <label>End Hour</label>
                 <input type='time' name='hourmax' id="hourmax"class='form-control' required value="" disabled/>
             </div> --}}
+
+            <div class='form-group total_month' style="display: none;">
+                <label>Total Month</label>
+                <input type='number' name='total_month' id="total_month" class='form-control' required value=""/>
+            </div>
+
+            <div class='form-group total_week' style="display: none;">
+                <label>Total Week</label>
+                <input type='number' name='total_week' id="total_week"class='form-control' required value=""/>
+            </div>
+
+            <div class='form-group total_days' style="display: none;">
+                <label>Total Days</label>
+                <input type='number' name='total_days' id="total_days" class='form-control' required value=""/>
+            </div>
+
             <div class='form-group total_hour' style="display: none;">
                 <label>Total Hour</label>
                 <input type='number' name='total_hour' id="total_hour"class='form-control' required value=""/>

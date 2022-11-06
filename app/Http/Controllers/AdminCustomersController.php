@@ -305,9 +305,9 @@
             }elseif($column_index == 1 && $column_value == 2){
                 $column_value = 'Perempuan';
             }
-            if($column_index == 10 && $column_value == 1){
+            if($column_index == 9 && $column_value == 1){
                 $column_value = 'Active';
-            }elseif($column_index == 10 && $column_value == 2){
+            }elseif($column_index == 9 && $column_value == 2){
                 $column_value = 'Banned';
             }
 	    }

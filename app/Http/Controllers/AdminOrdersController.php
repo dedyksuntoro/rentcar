@@ -37,6 +37,7 @@
 			$this->col[] = ["label"=>"Branch","name"=>"id_branch","join"=>"tbm_branch,branch_name"];
 			$this->col[] = ["label"=>"Manufacturer","name"=>"(SELECT tbm_car_manufacturer.manufacturer FROM tbl_cars JOIN tbm_car_manufacturer ON tbm_car_manufacturer.id = tbl_cars.id_manufacturer WHERE tbl_cars.id = tbl_orders.id_car) as manufacturer"];
 			$this->col[] = ["label"=>"Brand","name"=>"(SELECT tbm_car_brand.brand FROM tbl_cars JOIN tbm_car_brand ON tbm_car_brand.id = tbl_cars.id_brand WHERE tbl_cars.id = tbl_orders.id_car) as brand"];
+			$this->col[] = ["label"=>"Reg. Number","name"=>"(SELECT registration_number FROM tbl_cars WHERE tbl_cars.id = tbl_orders.id_car) as registration_number"];
 			$this->col[] = ["label"=>"Customer","name"=>"id_customer","join"=>"tbl_customers,customer_name"];
 			$this->col[] = ["label"=>"Pay Status","name"=>"pay_status"];
 			$this->col[] = ["label"=>"Total Price","name"=>"total","callback_php"=>'"Rp. ".number_format($row->total)'];
@@ -62,6 +63,7 @@
 				$this->form[] = ['label'=>'Order Number','name'=>'order_number','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Branch','name'=>'id_branch','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Customer','name'=>'id_customer','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbl_customers,customer_name'];
+				$this->form[] = ['label'=>'Ordered From','name'=>'ordered_from','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbm_ordered_vendors,id'];
 				$this->form[] = ['label'=>'Car','name'=>'id_car','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbl_cars,id'];
 				$this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Rental Type','name'=>'rent_type','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -71,6 +73,8 @@
 				$this->form[] = ['label'=>'Return Date','name'=>'return_date','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Back Hour','name'=>'back_hour','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total Hour','name'=>'total_hour','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+                $this->form[] = ['label'=>'Delivered','name'=>'delivered','type'=>'select','dataenum'=>'yes|Yes;no|No'];
+				$this->form[] = ['label'=>'Delivery Address','name'=>'delivery_address','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Discount','name'=>'discount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total','name'=>'total','type'=>'money','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Initial Total','name'=>'initial_total','type'=>'hidden','width'=>'col-sm-10'];
@@ -195,6 +199,7 @@
 	        $this->script_js = '
                 $(function () {
 					$("#rent_type").change(function(){
+                        $("#id_cars").prop("disabled", false);
 						var type = $("option:selected", this).text();
 						if(type == "Monthly"){
 							$(".total_month").show();
@@ -285,16 +290,18 @@
 
                     $("#id_cars").change(function(){
 						var type = $("option:selected", "#rent_type").text();
-						if(type == "MONTHLY"){
+                        console.log(type);
+						if(type == "Monthly"){
 							var price = $("option:selected", this).text().split("|");
 							$("#price").val(price[1].replace(/[^0-9]/gi, ""));
+                            console.log(price);
 							if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
 								$("#total").val($("#price").val() * $("#total_month").val());
 							}else{
 								$("#total").val($("#price").val() * $("#total_month").val() - ($("#price").val() * $("#total_month").val() * $("#discount").val() / 100));
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
-						}else if(type == "WEEKLY"){
+						}else if(type == "Weekly"){
 							var price = $("option:selected", this).text().split("|");
 							$("#price").val(price[2].replace(/[^0-9]/gi, ""));
 							if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
@@ -303,7 +310,7 @@
 								$("#total").val($("#price").val() * $("#total_week").val() - ($("#price").val() * $("#total_week").val() * $("#discount").val() / 100));
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
-						}else if(type == "DAILY"){
+						}else if(type == "Daily"){
 							var price = $("option:selected", this).text().split("|");
 							$("#price").val(price[3].replace(/[^0-9]/gi, ""));
 							if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
@@ -312,7 +319,7 @@
 								$("#total").val($("#price").val() * $("#total_days").val() - ($("#price").val() * $("#total_days").val() * $("#discount").val() / 100));
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
-						}else if(type == "HOURLY"){
+						}else if(type == "Hourly"){
 							var price = $("option:selected", this).text().split("|");
 							$("#price").val(price[4].replace(/[^0-9]/gi, ""));
 							if($("#discount").val() == null || $("#discount").val() == 0 || $("#discount").val() == ""){
@@ -403,28 +410,28 @@
 
                     $("#discount").keyup(function(){
 						var type = $("option:selected", "#rent_type").text();
-						if(type == "MONTHLY"){
+						if(type == "Monthly"){
 							if($(this).val() == null || $(this).val() == 0 || $(this).val() == ""){
 								$("#total").val($("#price").val() * $("#total_month").val());
 							}else{
 								$("#total").val($("#price").val() * $("#total_month").val() - ($("#price").val() * $("#total_month").val() * $(this).val() / 100));
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
-						}else if(type == "WEEKLY"){
+						}else if(type == "Weekly"){
 							if($(this).val() == null || $(this).val() == 0 || $(this).val() == ""){
 								$("#total").val($("#price").val() * $("#total_week").val());
 							}else{
 								$("#total").val($("#price").val() * $("#total_week").val() - ($("#price").val() * $("#total_week").val() * $(this).val() / 100));
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
-						}else if(type == "DAILY"){
+						}else if(type == "Daily"){
 							if($(this).val() == null || $(this).val() == 0 || $(this).val() == ""){
 								$("#total").val($("#price").val() * $("#total_days").val());
 							}else{
 								$("#total").val($("#price").val() * $("#total_days").val() - ($("#price").val() * $("#total_days").val() * $(this).val() / 100));
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
-						}else if(type == "HOURLY"){
+						}else if(type == "Hourly"){
 							if($(this).val() == null || $(this).val() == 0 || $(this).val() == ""){
 								$("#total").val($("#price").val() * $("#total_hour").val());
 							}else{
@@ -432,6 +439,19 @@
 							}
 							$(".inputMoney#total").priceFormat({"prefix":"","thousandsSeparator":",","centsLimit":"0","clearOnEmpty":false});
 						}
+                    });
+
+                    $("#delivered").change(function(){
+                        var delivered = $("option:selected", this).val();
+						if(delivered == "yes"){
+                            $(".delivery_address").show();
+                            $(".delivery_address").prop("disabled", false);
+                            $(".delivery_address").val("");
+                        }else if(delivered == "no"){
+                            $(".delivery_address").hide();
+                            $(".delivery_address").prop("disabled", true);
+                            $(".delivery_address").val("");
+                        }
                     });
 
 					// var arr_total = [];
@@ -548,6 +568,7 @@
 			if (CRUDBooster::me()->id_branch != 0) {
 				$data['get_branch'] = DB::table('tbm_branch')->where('id', CRUDBooster::me()->id_branch)->get();
                 $data['get_customer'] = DB::table('tbl_customers')->where('id_branch', CRUDBooster::me()->id_branch)->where('status', 1)->get();
+                $data['get_ordered_from'] = DB::table('tbm_ordered_vendors')->get();
                 $data['get_car'] = DB::table('tbl_cars')
                     ->select('tbl_cars.id AS idcar', 'tbl_cars.on_duty AS onduty', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_permonth AS pricepermonth', 'tbl_cars.price_perweek AS priceperweek', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
                     ->join('tbm_car_brand', 'tbm_car_brand.id', 'tbl_cars.id_brand')
@@ -558,6 +579,7 @@
 			}else{
 				$data['get_branch'] = DB::table('tbm_branch')->get();
                 $data['get_customer'] = DB::table('tbl_customers')->where('status', 1)->get();
+                $data['get_ordered_from'] = DB::table('tbm_ordered_vendors')->get();
                 $data['get_car'] = DB::table('tbl_cars')
                 ->select('tbl_cars.id AS idcar', 'tbl_cars.on_duty AS onduty', 'tbm_car_brand.brand AS brand', 'tbm_car_manufacturer.manufacturer AS manufacturer', 'tbl_cars.price_permonth AS pricepermonth', 'tbl_cars.price_perweek AS priceperweek', 'tbl_cars.price_perday AS priceperday', 'tbl_cars.price_perhour AS priceperhour')
                     ->join('tbm_car_brand', 'tbm_car_brand.id', 'tbl_cars.id_brand')

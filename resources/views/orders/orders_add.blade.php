@@ -28,6 +28,15 @@
                 </select>
             </div>
             <div class="form-group">
+                <label for="ordered_from">Ordered From</label>
+                <select class="form-control" name="ordered_from" id="ordered_from" required>
+                    <option value="" selected disabled>-- Select Ordered From --</option>
+                    @foreach ($get_ordered_from as $row)
+                        <option value="{{$row->id}}">{{$row->vendor}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="rent_type">Rental Type</label>
                 <select class="form-control" name="rent_type" id="rent_type" required>
                     <option value="" selected disabled>-- Select Rental Type --</option>
@@ -39,12 +48,12 @@
             </div>
             <div class="form-group">
                 <label for="id_car">Car</label>
-                <select class="form-control" name="id_car" id="id_cars" required>
+                <select class="form-control" name="id_car" id="id_cars" required disabled>
                     <option value="" selected disabled>-- Select Car --</option>
                     @foreach ($get_car as $row)
                         <option value="{{$row->idcar}}">{{$row->brand}} - {{$row->manufacturer}} | MONTHLY Rp. {{number_format($row->pricepermonth, 0, ',' ,'.')}} | WEEKLY Rp. {{number_format($row->priceperweek, 0, ',' ,'.')}} | DAILY Rp. {{number_format($row->priceperday, 0, ',' ,'.')}} | HOURLY Rp. {{number_format($row->priceperhour, 0, ',' ,'.')}} {{($row->onduty == 1 ? '(ON DUTY)' : '')}}</option>
                     @endforeach
-                    <input type='hidden' name='price' id="price"class='form-control' required value="" readonly/>
+                    <input type='hidden' name='price' id="price" class='form-control' required value="" readonly/>
                 </select>
             </div>
 
@@ -105,6 +114,19 @@
             <div class='form-group back_hour'>
                 <label>Back Hour</label>
                 <input type='time' name='back_hour' id="back_hour"class='form-control' required value="" readonly/>
+            </div>
+
+            <div class="form-group">
+                <label for="delivered">Delivered</label>
+                <select class="form-control" name="delivered" id="delivered" required>
+                    <option value="" selected disabled>-- Select Delivered --</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class='form-group delivery_address' style="display: none;">
+                <label>Delivery Address</label>
+                <input type='text' name='delivery_address' id="delivery_address" class='form-control' required value=""/>
             </div>
 
             <div class='form-group'>

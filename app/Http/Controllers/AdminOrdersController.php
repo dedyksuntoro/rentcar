@@ -48,13 +48,13 @@
 			# START FORM DO NOT REMOVE THIS LINE
 			// dd(CRUDBooster::getCurrentMethod());
 			$this->form = [];
-			if(CRUDBooster::getCurrentMethod() == 'getEdit' || CRUDBooster::getCurrentMethod() == 'getDetail' || CRUDBooster::getCurrentMethod() == 'postEditSave'):
+			if(CRUDBooster::getCurrentMethod() == 'getEdit' || CRUDBooster::getCurrentMethod() == 'postEditSave'):
 				// $this->form[] = ['label'=>'Order Number','name'=>'order_number','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10','disabled'=>true];
 				// $this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10','readonly'=>true];
 				// $this->form[] = ['label'=>'Total Days','name'=>'total_days','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','readonly'=>true];
 				// $this->form[] = ['label'=>'Total Hour','name'=>'total_hour','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','readonly'=>true];
 				// $this->form[] = ['label'=>'Discount','name'=>'discount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','readonly'=>true];
-				$this->form[] = ['label'=>'Additional Cost','name'=>'additional_cost','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Additional Cost','name'=>'additional_cost','type'=>'text','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Description','name'=>'description_add_cost','type'=>'textarea'];
 				$this->form[] = ['label'=>'Initial Total','name'=>'initial_total','type'=>'hidden','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total','name'=>'total','type'=>'hidden','validation'=>'required|min:0','width'=>'col-sm-10','readonly'=>true];
@@ -63,7 +63,7 @@
 				$this->form[] = ['label'=>'Order Number','name'=>'order_number','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Branch','name'=>'id_branch','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Customer','name'=>'id_customer','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbl_customers,customer_name'];
-				$this->form[] = ['label'=>'Ordered From','name'=>'ordered_from','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbm_ordered_vendors,id'];
+				$this->form[] = ['label'=>'Ordered From','name'=>'ordered_from','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbm_ordered_vendors,vendor'];
 				$this->form[] = ['label'=>'Car','name'=>'id_car','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-10','datatable'=>'tbl_cars,id'];
 				$this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Rental Type','name'=>'rent_type','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -122,8 +122,9 @@
 	        |
 	        */
 	        $this->addaction = array();
-			$this->addaction[] = ['label'=>'Additional Cost','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-money','color'=>'success','showIf'=>"[pay_status] != 'Paid'"];
-			$this->addaction[] = ['label'=>'Additional Cost','url'=>CRUDBooster::mainpath('detail/[id]'),'icon'=>'fa fa-money','color'=>'success','showIf'=>"[pay_status] === 'Paid'"];
+			$this->addaction[] = ['label'=>'Detail','url'=>CRUDBooster::mainpath('detail/[id]'),'icon'=>'fa fa-list','color'=>'primary'];
+			$this->addaction[] = ['label'=>'Additional Cost','url'=>CRUDBooster::mainpath('edit/[id]'),'icon'=>'fa fa-money','color'=>'success'];
+			// $this->addaction[] = ['label'=>'Additional Cost','url'=>CRUDBooster::mainpath('detail/[id]'),'icon'=>'fa fa-money','color'=>'success','showIf'=>"[pay_status] === 'Paid'"];
 
 
 	        /*
@@ -589,6 +590,27 @@
 			}
 
             return $this->view('orders/orders_add',$data);
+        }
+
+        public function getDetail($id) {
+            if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {
+                CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+            }
+
+            $data = [];
+            $data['page_title'] = 'Detail Orders';
+            if (CRUDBooster::me()->id_branch != 0) {
+                $data['get_orders'] = DB::table('view_orders')
+                        ->where('tbl_orders.id_branch', CRUDBooster::me()->id_branch)
+                        ->where('tbl_orders.id', $id)
+                        ->first();
+            }else{
+                $data['get_orders'] = DB::table('view_orders')
+                        ->where('view_orders.id', $id)
+                        ->first();
+            }
+
+            return $this->view('orders/orders_detail',$data);
         }
 
 

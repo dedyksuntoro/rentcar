@@ -54,7 +54,7 @@
 				// $this->form[] = ['label'=>'Total Days','name'=>'total_days','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','readonly'=>true];
 				// $this->form[] = ['label'=>'Total Hour','name'=>'total_hour','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','readonly'=>true];
 				// $this->form[] = ['label'=>'Discount','name'=>'discount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10','readonly'=>true];
-				$this->form[] = ['label'=>'Additional Cost','name'=>'additional_cost','type'=>'text','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Additional Cost','name'=>'additional_cost','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Description','name'=>'description_add_cost','type'=>'textarea'];
 				$this->form[] = ['label'=>'Initial Total','name'=>'initial_total','type'=>'hidden','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total','name'=>'total','type'=>'hidden','validation'=>'required|min:0','width'=>'col-sm-10','readonly'=>true];
@@ -69,10 +69,12 @@
 				$this->form[] = ['label'=>'Rental Type','name'=>'rent_type','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Booking Date','name'=>'booking_date','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Pickup Time','name'=>'pickup_time','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
-				$this->form[] = ['label'=>'Total Days','name'=>'total_days','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Return Date','name'=>'return_date','type'=>'date','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Back Hour','name'=>'back_hour','type'=>'time','validation'=>'required|min:0','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Total Hour','name'=>'total_hour','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Total Days','name'=>'total_days','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Total Week','name'=>'total_week','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+				$this->form[] = ['label'=>'Total Month','name'=>'total_month','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
                 $this->form[] = ['label'=>'Delivered','name'=>'delivered','type'=>'select','dataenum'=>'yes|Yes;no|No'];
 				$this->form[] = ['label'=>'Delivery Address','name'=>'delivery_address','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 				$this->form[] = ['label'=>'Discount','name'=>'discount','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
@@ -107,8 +109,8 @@
 	        |
 	        */
 	        $this->sub_module = array();
-            $this->sub_module[] = ['label'=>'Payment','path'=>'order_payments','parent_columns'=>'order_number,price,datemin,datemax,total_days,hourmin,hourmax,total_hour,discount,additional_cost,total,pay_status',
-                'parent_columns_alias'=>'Order Number,Price,Start Date,End Date,Total Day,Start Hour,End Hour,Total Hour,Discount,Additional Cost,Total Price,Pay Status','foreign_key'=>'id_order','button_color'=>'success','button_icon'=>'fa fa-money'];
+            $this->sub_module[] = ['label'=>'Payment','path'=>'order_payments','parent_columns'=>'order_number,price,discount,additional_cost,total,pay_status',
+                'parent_columns_alias'=>'Order Number,Price,Discount,Additional Cost,Total Price,Pay Status','foreign_key'=>'id_order','button_color'=>'success','button_icon'=>'fa fa-money'];
 
 	        /*
 	        | ----------------------------------------------------------------------
@@ -674,7 +676,7 @@
                     ->count('id');
 
                 if ($cek_crash > 0) {
-                    CRUDBooster::redirect(CRUDBooster::adminPath(), 'Terdapat benturan jadwal pada tanggal '.$postdata['booking_date'].' sampai dengan tanggal '.$postdata['return_date']);
+                    CRUDBooster::redirect(CRUDBooster::mainpath(), 'Terdapat benturan jadwal pada tanggal '.$postdata['booking_date'].' sampai dengan tanggal '.$postdata['return_date']);
                 }
             }
 

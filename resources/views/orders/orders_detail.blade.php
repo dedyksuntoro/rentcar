@@ -27,7 +27,7 @@
                     <input type='text' class='form-control' value="{{$get_orders->year}}" readonly/>
                 </div>
             </div>
-            <div class='col-md-3'>
+            <div class='col-md-2'>
                 <div class='form-group'>
                     <label>Registration Number</label>
                     <input type='text' class='form-control' value="{{$get_orders->registration_number}}" readonly/>
@@ -49,7 +49,7 @@
                     <input type='text' class='form-control' value="{{$get_orders->booking_date}}" readonly/>
                 </div>
             </div>
-            <div class='col-md-3'>
+            <div class='col-md-2'>
                 <div class='form-group'>
                     <label>Rent Type</label>
                     <input type='text' class='form-control' value="{{$get_orders->rent_type}}" readonly/>
@@ -71,7 +71,7 @@
                     <input type='text' class='form-control' value="{{$get_orders->delivery_address}}" readonly/>
                 </div>
             </div>
-            <div class='col-md-3'>
+            <div class='col-md-2'>
                 <div class='form-group'>
                     <label>Discount</label>
                     <input type='text' class='form-control' value="{{$get_orders->discount}}" readonly/>
@@ -93,17 +93,27 @@
                     <input type='text' class='form-control' value="{{$get_orders->total_hour}}" readonly/>
                 </div>
             </div>
-            <div class='form-group'>
-                <label>Total Day</label>
-                <input type='text' class='form-control' value="{{$get_orders->total_days}}" readonly/>
-            </div>
-            <div class='form-group'>
-                <label>Total Price</label>
-                <input type='text' class='form-control' value="{{$get_orders->total}}" readonly/>
-            </div>
-            <div class='form-group'>
-                <label>Status</label>
-                <input type='text' class='form-control' value="{{$get_orders->pay_status}}" readonly/>
+            <div class='col-md-3'>
+                <div class='form-group'>
+                    <label>Total Day</label>
+                    <input type='text' class='form-control' value="{{$get_orders->total_days}}" readonly/>
+                </div>
+                <div class='form-group'>
+                    <label>Total Week</label>
+                    <input type='text' class='form-control' value="{{$get_orders->total_week}}" readonly/>
+                </div>
+                <div class='form-group'>
+                    <label>Total Month</label>
+                    <input type='text' class='form-control' value="{{$get_orders->total_month}}" readonly/>
+                </div>
+                <div class='form-group'>
+                    <label>Total Price</label>
+                    <input type='text' class='form-control' value="{{$get_orders->total}}" readonly/>
+                </div>
+                <div class='form-group'>
+                    <label>Status</label>
+                    <input type='text' class='form-control' value="{{$get_orders->pay_status}}" readonly/>
+                </div>
             </div>
         </div>
         {{-- <div class='panel-footer text-right'>
